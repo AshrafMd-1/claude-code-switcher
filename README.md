@@ -9,12 +9,14 @@ $ cs list
 
   NAME      EMAIL                      5-HOUR                       7-DAY
   --------  -------------------------  ---------------------------  -------
-* personal  personal@example.com       12% (3h 40m · 4:30 PM GST)  free
+* personal  personal@example.com       12% (3h 40m · 4:30 PM GST)   free
   work      work@company.com           free                         free
-  office    office@agency.com          87% (1h 12m · 6:00 PM GST)  43%
+  office    office@agency.com          87% (1h 12m · 6:00 PM GST)   43%
+
 
 $ cs switch work
 Switched to 'work' (work@company.com). Restart Claude Code to apply.
+
 
 $ cs auto
 work has 0% 5-hour usage — maximum headroom.

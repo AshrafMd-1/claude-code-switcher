@@ -610,6 +610,7 @@ case "${1:-}" in
         echo "Commands:"
         echo "  cs fetch           Save current account (detects duplicates by email)"
         echo "  cs list            List all profiles with live 5h & 7d usage"
+        echo "  cs list -n         List profiles without fetching usage (fast)"
         echo "  cs switch <name>   Switch to a profile"
         echo "  cs rename <name>   Rename a profile (prompts for new name)"
         echo "  cs current         Show the active account"

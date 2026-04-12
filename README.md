@@ -1,4 +1,4 @@
-# cs — Claude Code account switcher
+# cs - Claude Code account switcher
 
 Managing multiple Claude Code accounts means logging out, logging back in, waiting, repeating. If you juggle more than one account, you know the pain.
 
@@ -19,7 +19,7 @@ Switched to 'work' (work@company.com). Restart Claude Code to apply.
 
 
 $ cs auto
-work has 0% 5-hour usage — maximum headroom.
+work has 0% 5-hour usage - maximum headroom.
 Switching to 'work'...
 Switched to 'work' (work@company.com). Restart Claude Code to apply.
 ```
@@ -29,12 +29,12 @@ Pure bash, zero dependencies, credentials stored securely in macOS Keychain.
 ## Requirements
 
 **Required:**
-- macOS — credential storage relies on the macOS Keychain
-- Claude Code CLI — installed and authenticated
-- Python 3 — pre-installed on macOS
+- macOS - credential storage relies on the macOS Keychain
+- Claude Code CLI - installed and authenticated
+- Python 3 - pre-installed on macOS
 
 **Optional:**
-- [Gemini CLI](https://github.com/google-gemini/gemini-cli) — only needed for `cs use` and `cs auto` (the AI-powered commands). Everything else works without it.
+- [Gemini CLI](https://github.com/google-gemini/gemini-cli) - only needed for `cs use` and `cs auto` (the AI-powered commands). Everything else works without it.
 
 ## Install
 
@@ -55,7 +55,7 @@ ln -s "$PWD/claude-code-switcher/cs" /usr/local/bin/cs
 ## Setup
 
 1. Sign into an account via `/login` in Claude Code
-2. Run `cs fetch` — it will ask for a profile name
+2. Run `cs fetch` - it will ask for a profile name
 3. Sign into another account, run `cs fetch` again
 4. Repeat for as many accounts as you have
 
@@ -76,13 +76,13 @@ cs fetch
 ## Commands
 
 ### `cs fetch`
-Saves the currently signed-in Claude Code account as a named profile. If the account is already saved, it updates its stored credentials. If it's new, it prompts you for a name (call it anything — `personal`, `work`, `freelance`, whatever makes sense to you).
+Saves the currently signed-in Claude Code account as a named profile. If the account is already saved, it updates its stored credentials. If it's new, it prompts you for a name (call it anything - `personal`, `work`, `freelance`, whatever makes sense to you).
 
 ### `cs list`
-Lists all saved profiles with their live 5-hour and 7-day usage fetched in parallel from the Anthropic API. The `*` marks the active account. Use `cs list -n` for a compact view without any API calls.
+Lists all saved profiles with their live 5-hour and 7-day usage fetched in parallel from the Anthropic API. The `*` marks the active account. Use `cs list -n` for a compact view that skips usage fetching — no 5-hour or 7-day columns, just names. Useful when you want a quick look without waiting for the API.
 
 ### `cs switch <name>`
-Switches to the named profile instantly — swaps the credentials in Keychain and updates `~/.claude.json`. Restart Claude Code after switching to apply the change.
+Switches to the named profile instantly - swaps the credentials in Keychain and updates `~/.claude.json`. Restart Claude Code after switching to apply the change.
 
 ### `cs current`
 Shows the currently active account (name, email, organization) along with its live 5-hour and 7-day usage.
@@ -94,7 +94,7 @@ Renames a saved profile. Prompts you for the new name interactively.
 Forces a token refresh for the active profile. Useful if Claude Code is showing auth errors. Runs `claude auth status` to trigger Claude's internal OAuth refresh, then saves the new token back to the profile.
 
 ### `cs remove <name>`
-Deletes a saved profile and removes its credentials from Keychain. Cannot remove the currently active account — switch to another one first.
+Deletes a saved profile and removes its credentials from Keychain. Cannot remove the currently active account - switch to another one first.
 
 ### `cs purge`
 Removes all saved profiles and credentials from Keychain. Asks for confirmation before proceeding.
@@ -109,9 +109,9 @@ Same as `cs use`, but automatically switches to whichever account Gemini recomme
 
 `cs list` and `cs current` show two usage windows per account:
 
-- **5-HOUR** — rolling 5-hour token window. At 100%, Claude Code rate-limits you until the reset time shown. This is the most critical window for immediate work.
-- **7-DAY** — rolling 7-day weekly quota.
-- **`free`** — no usage recorded in that window yet, zero rate-limit risk.
+- **5-HOUR** - rolling 5-hour token window. At 100%, Claude Code rate-limits you until the reset time shown. This is the most critical window for immediate work.
+- **7-DAY** - rolling 7-day weekly quota.
+- **`free`** - no usage recorded in that window yet, zero rate-limit risk.
 - The time shown (e.g. `4h 2m · 3:30 PM GST`) means: time remaining until reset · exact local reset time.
 
 ## Token refresh
@@ -127,10 +127,35 @@ Claude Code uses OAuth tokens that expire. `cs` handles this automatically:
 ## How it works
 
 Profiles are stored in `~/.claude-profiles/<email>/`:
-- `account.json` — the `oauthAccount` block from `~/.claude.json`
-- `name` — the display name you chose
+- `account.json` - the `oauthAccount` block from `~/.claude.json`
+- `name` - the display name you chose
 
 The OAuth token is stored in macOS Keychain under the service name `claude-profile-<email>`. Switching swaps both the Keychain token and the `oauthAccount` field in `~/.claude.json`.
+
+## Auto-refresh on session start
+
+You can configure Claude Code to automatically refresh your active profile's token every time a session starts. Add this to your `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cs refresh",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+This runs `cs refresh` silently in the background each time Claude Code starts, keeping your token fresh without any manual intervention.
 
 ## License
 

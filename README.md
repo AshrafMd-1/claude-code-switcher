@@ -90,9 +90,6 @@ Shows the currently active account (name, email, organization) along with its li
 ### `cs rename <name>`
 Renames a saved profile. Prompts you for the new name interactively.
 
-### `cs refresh`
-Forces a token refresh for the active profile. Useful if Claude Code is showing auth errors. Runs `claude auth status` to trigger Claude's internal OAuth refresh, then saves the new token back to the profile.
-
 ### `cs remove <name>`
 Deletes a saved profile and removes its credentials from Keychain. Cannot remove the currently active account - switch to another one first.
 
@@ -120,7 +117,6 @@ Claude Code uses OAuth tokens that expire. `cs` handles this automatically:
 
 - **When you switch away** from a profile, the latest token (which Claude may have silently refreshed during your session) is saved back to that profile's Keychain entry.
 - **When you switch to** a profile with an expired token, it triggers a refresh and saves the new token.
-- **`cs refresh`** lets you manually refresh the active profile at any time.
 
 > If a profile hasn't been used in a long time and its refresh token has expired, you'll need to sign in again with `/login` in Claude Code and re-run `cs fetch`.
 
@@ -131,31 +127,6 @@ Profiles are stored in `~/.claude-profiles/<email>/`:
 - `name` - the display name you chose
 
 The OAuth token is stored in macOS Keychain under the service name `claude-profile-<email>`. Switching swaps both the Keychain token and the `oauthAccount` field in `~/.claude.json`.
-
-## Auto-refresh on session start
-
-You can configure Claude Code to automatically refresh your active profile's token every time a session starts. Add this to your `~/.claude/settings.json`:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cs refresh",
-            "async": true
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-This runs `cs refresh` silently in the background each time Claude Code starts, keeping your token fresh without any manual intervention.
 
 ## License
 

@@ -359,29 +359,6 @@ except:
     echo "Switched to '$name' ($email). Restart Claude Code to apply."
 }
 
-cmd_refresh() {
-    local current_email current_token current_name
-    current_email=$(_active_email)
-    if [[ -z "$current_email" ]]; then
-        echo "Error: No active account found."
-        exit 1
-    fi
-    current_name=$(_name_for_email "$current_email")
-
-    # Poke Claude to trigger its internal OAuth refresh
-    claude auth status &>/dev/null || true
-
-    # Capture whatever is now in the active slot (freshened by Claude)
-    current_token=$(_active_token)
-    if [[ -z "$current_token" ]]; then
-        echo "Error: Could not read active credentials."
-        exit 1
-    fi
-
-    # Save it back to this profile's stored slot
-    security add-generic-password -U -s "claude-profile-$current_email" -a "$KC_ACCT" -w "$current_token" 2>/dev/null
-    echo "Refreshed credentials for '${current_name:-$current_email}'."
-}
 
 cmd_rename() {
     local old_name="${1:-}"
@@ -599,7 +576,6 @@ case "${1:-}" in
     switch)  cmd_switch "${2:-}" ;;
     rename)  cmd_rename "${2:-}" ;;
     current) cmd_current ;;
-    refresh) cmd_refresh ;;
     use)     cmd_use ;;
     auto)    cmd_auto ;;
     remove)  cmd_remove "${2:-}" ;;
@@ -614,7 +590,6 @@ case "${1:-}" in
         echo "  cs switch <name>   Switch to a profile"
         echo "  cs rename <name>   Rename a profile (prompts for new name)"
         echo "  cs current         Show the active account"
-        echo "  cs refresh         Refresh the active account's stored token"
         echo "  cs remove <name>   Remove a saved profile"
         echo "  cs purge           Remove all profiles and credentials"
         echo "  cs use             Show usage + AI analysis of all accounts"

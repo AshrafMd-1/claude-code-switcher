@@ -111,15 +111,6 @@ Same as `cs use`, but automatically switches to whichever account Gemini recomme
 - **`free`** - no usage recorded in that window yet, zero rate-limit risk.
 - The time shown (e.g. `4h 2m · 3:30 PM GST`) means: time remaining until reset · exact local reset time.
 
-## Token refresh
-
-Claude Code uses OAuth tokens that expire. `cs` handles this automatically:
-
-- **When you switch away** from a profile, the latest token (which Claude may have silently refreshed during your session) is saved back to that profile's Keychain entry.
-- **When you switch to** a profile with an expired token, it triggers a refresh and saves the new token.
-
-> If a profile hasn't been used in a long time and its refresh token has expired, you'll need to sign in again with `/login` in Claude Code and re-run `cs fetch`.
-
 ## How it works
 
 Profiles are stored in `~/.claude-profiles/<email>/`:

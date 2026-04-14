@@ -41,14 +41,14 @@ Pure bash, zero dependencies, credentials stored securely in macOS Keychain.
 Copy `cs` to somewhere on your PATH:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/claude-code-switcher/main/cs -o /usr/local/bin/cs
+curl -fsSL https://raw.githubusercontent.com/AshrafMd-1/claude-code-switcher/main/cs -o /usr/local/bin/cs
 chmod +x /usr/local/bin/cs
 ```
 
 Or clone and symlink:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-code-switcher.git
+git clone https://github.com/AshrafMd-1/claude-code-switcher.git
 ln -s "$PWD/claude-code-switcher/cs" /usr/local/bin/cs
 ```
 

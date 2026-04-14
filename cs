@@ -336,7 +336,7 @@ cmd_switch() {
     echo "Switching..."
     _do_switch_by_email "$email"
 
-    echo "Switched to '$name' ($email). Restart Claude Code to apply."
+    echo "Switched to '$name' ($email)."
 }
 
 

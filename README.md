@@ -15,13 +15,13 @@ $ cs list
 
 
 $ cs switch work
-Switched to 'work' (work@company.com). Restart Claude Code to apply.
+Switched to 'work' (work@company.com).
 
 
 $ cs auto
 work has 0% 5-hour usage - maximum headroom.
 Switching to 'work'...
-Switched to 'work' (work@company.com). Restart Claude Code to apply.
+Switched to 'work' (work@company.com).
 ```
 
 Pure bash, zero dependencies, credentials stored securely in macOS Keychain.
@@ -41,14 +41,14 @@ Pure bash, zero dependencies, credentials stored securely in macOS Keychain.
 Copy `cs` to somewhere on your PATH:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/yourusername/claude-code-switcher/main/cs -o /usr/local/bin/cs
+curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/claude-code-switcher/main/cs -o /usr/local/bin/cs
 chmod +x /usr/local/bin/cs
 ```
 
 Or clone and symlink:
 
 ```bash
-git clone https://github.com/yourusername/claude-code-switcher.git
+git clone https://github.com/YOUR_USERNAME/claude-code-switcher.git
 ln -s "$PWD/claude-code-switcher/cs" /usr/local/bin/cs
 ```
 
@@ -79,10 +79,13 @@ cs fetch
 Saves the currently signed-in Claude Code account as a named profile. If the account is already saved, it updates its stored credentials. If it's new, it prompts you for a name (call it anything - `personal`, `work`, `freelance`, whatever makes sense to you).
 
 ### `cs list`
-Lists all saved profiles with their live 5-hour and 7-day usage fetched in parallel from the Anthropic API. The `*` marks the active account. Use `cs list -n` for a compact view that skips usage fetching — no 5-hour or 7-day columns, just names. Useful when you want a quick look without waiting for the API.
+Lists all saved profiles with their live 5-hour and 7-day usage fetched in parallel from the Anthropic API. The `*` marks the active account.
+
+### `cs list -n`
+Compact view - skips usage fetching entirely. Just shows profile names with no API calls. Useful when you want a quick look without waiting.
 
 ### `cs switch <name>`
-Switches to the named profile instantly - swaps the credentials in Keychain and updates `~/.claude.json`. Restart Claude Code after switching to apply the change.
+Switches to the named profile instantly - swaps the credentials in Keychain and updates `~/.claude.json`. No restart needed in any environment - Claude automatically starts with the new account's usage on the next session or message.
 
 ### `cs current`
 Shows the currently active account (name, email, organization) along with its live 5-hour and 7-day usage.
@@ -110,6 +113,14 @@ Same as `cs use`, but automatically switches to whichever account Gemini recomme
 - **7-DAY** - rolling 7-day weekly quota.
 - **`free`** - no usage recorded in that window yet, zero rate-limit risk.
 - The time shown (e.g. `4h 2m · 3:30 PM GST`) means: time remaining until reset · exact local reset time.
+
+## Unauthorized errors after ~8 hours
+
+Claude Code OAuth access tokens expire after roughly 8 hours. When they do, `cs list` may show `unauthorized` instead of usage data. This is normal and easy to fix - no re-setup needed.
+
+**Fix:** Start any Claude session. Claude Code automatically refreshes the token when it connects.
+
+Simply start any Claude session (`claude` in terminal, or open Claude Code in VS Code) - Claude automatically refreshes the token on connect. Then `cs switch <name>` works normally, and the new account's limits apply immediately without any restart.
 
 ## How it works
 

@@ -322,39 +322,19 @@ cmd_switch() {
         exit 1
     fi
 
-    # Save current account's latest token back before switching
-    # (Claude Code silently refreshes the token during sessions — this captures it)
+    # Save current account's token before switching
     local current_email current_token
     current_email=$(_active_email)
     if [[ -n "$current_email" && "$current_email" != "$email" ]]; then
         current_token=$(_active_token)
         if [[ -n "$current_token" ]]; then
+            echo "Saving token..."
             security add-generic-password -U -s "claude-profile-$current_email" -a "$KC_ACCT" -w "$current_token" 2>/dev/null
         fi
     fi
 
+    echo "Switching..."
     _do_switch_by_email "$email"
-
-    # Check if the loaded token is expired — if so, force Claude to refresh it
-    local token_expired
-    token_expired=$(security find-generic-password -s "claude-profile-$email" -w 2>/dev/null | python3 -c "
-import sys, json, time
-try:
-    d = json.loads(sys.stdin.read())
-    exp = (d.get('claudeAiOauth') or {}).get('expiresAt', 0)
-    print('yes' if exp and time.time() * 1000 > exp else 'no')
-except:
-    print('no')
-" 2>/dev/null)
-
-    if [[ "$token_expired" == "yes" ]]; then
-        echo "Token expired — refreshing..."
-        claude auth status &>/dev/null || true
-        # Save the freshened token back
-        local fresh_token
-        fresh_token=$(_active_token)
-        [[ -n "$fresh_token" ]] && security add-generic-password -U -s "claude-profile-$email" -a "$KC_ACCT" -w "$fresh_token" 2>/dev/null
-    fi
 
     echo "Switched to '$name' ($email). Restart Claude Code to apply."
 }

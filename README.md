@@ -129,7 +129,3 @@ Profiles are stored in `~/.claude-profiles/<email>/`:
 - `name` - the display name you chose
 
 The OAuth token is stored in macOS Keychain under the service name `claude-profile-<email>`. Switching swaps both the Keychain token and the `oauthAccount` field in `~/.claude.json`.
-
-## License
-
-MIT

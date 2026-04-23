@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# cs — Claude Code multi-account switcher
+# cs - Claude Code multi-account switcher
 # Primary key: email address
 # Storage: ~/.claude-profiles/<email>/{account.json, name}
 # Keychain: "claude-profile-<email>"
@@ -186,7 +186,7 @@ cmd_fetch() {
     local dir="$PROFILES_DIR/$email"
 
     if [[ -d "$dir" ]]; then
-        # Already exists — update token and account metadata
+        # Already exists - update token and account metadata
         local display_name
         display_name=$(_name_for_email "$email")
         python3 -c "
@@ -200,11 +200,11 @@ with open('$dir/account.json', 'w') as f:
         return
     fi
 
-    # New profile — prompt for display name
+    # New profile - prompt for display name
     printf "New profile: %s\nProfile name: " "$email"
     read -r display_name
     if [[ -z "$display_name" ]]; then
-        echo "Aborted — name cannot be empty."
+        echo "Aborted - name cannot be empty."
         exit 1
     fi
 
@@ -357,7 +357,7 @@ cmd_rename() {
     printf "New name for '%s': " "$old_name"
     read -r new_name
     if [[ -z "$new_name" ]]; then
-        echo "Aborted — name cannot be empty."
+        echo "Aborted - name cannot be empty."
         exit 1
     fi
     if [[ "$new_name" == "$old_name" ]]; then
@@ -450,7 +450,7 @@ YOUR TASK:
 1. Briefly explain what each account's numbers mean in plain English.
 2. Identify which account(s) have the most remaining capacity right now (5-hour window is most critical for immediate work).
 3. Give a clear recommendation: which account to switch to RIGHT NOW for best efficiency, and why.
-4. If any accounts are 'free' on 5-hour, highlight that — it means zero rate-limit risk.
+4. If any accounts are 'free' on 5-hour, highlight that - it means zero rate-limit risk.
 5. Suggest a smart rotation strategy if the user wants to maximize usage across all accounts.
 
 Be concise and actionable. End with a one-liner: 'Run: cs switch <name>' for the best account right now.
@@ -479,12 +479,12 @@ LEGEND:
 - Lower % = more remaining capacity.
 
 DECISION RULES (in order of priority):
-1. Prefer 'free' on 5-HOUR first — zero rate-limit risk.
+1. Prefer 'free' on 5-HOUR first - zero rate-limit risk.
 2. Among non-free, prefer lowest 5-HOUR %.
-3. Use 7-DAY % as tiebreaker — lower is better.
+3. Use 7-DAY % as tiebreaker - lower is better.
 4. If the active account (*) is already the best, still output it.
 
-OUTPUT FORMAT — two lines only, nothing else:
+OUTPUT FORMAT - two lines only, nothing else:
 Line 1: One sentence explaining why you picked this account.
 Line 2: SWITCH:<name>   (exact profile name, no spaces, no backticks, no punctuation)
 " 2>/dev/null)
@@ -561,7 +561,7 @@ case "${1:-}" in
     remove)  cmd_remove "${2:-}" ;;
     purge)   cmd_purge ;;
     *)
-        echo "cs — Claude Code account switcher"
+        echo "cs - Claude Code account switcher"
         echo ""
         echo "Commands:"
         echo "  cs fetch           Save current account (detects duplicates by email)"

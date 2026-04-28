@@ -2,7 +2,7 @@
 
 Managing multiple Claude Code accounts means logging out, logging back in, waiting, repeating. If you juggle more than one account, you know the pain.
 
-`cs` fixes that. Switch accounts instantly, see live usage across all of them, and let AI pick the best one automatically.
+`cs` fixes that. Switch accounts instantly, see live usage across all of them, and let AI pick the best one automatically. **No restart needed — Claude picks up the new account instantly on the next message.**
 
 ```
 $ cs list
